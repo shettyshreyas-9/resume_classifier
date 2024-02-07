@@ -1,0 +1,4 @@
+schema: '2.0'
+stages:
+  make_dataset:
+    cmd: python .\src\data\make_dataset.py .\data\raw\resume.csv  .\data\processed  .\make_data_logfile.log
