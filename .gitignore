@@ -93,5 +93,5 @@ target/
 /venv/
 /data/
 /models/
-/data
-/models
+/tmp_storage/
+/tmp_storage
