@@ -89,7 +89,9 @@ target/
 .mypy_cache/
 
 
-
+# added by me
 /venv/
 /data/
 /models/
+/data
+/models
