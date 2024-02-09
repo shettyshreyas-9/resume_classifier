@@ -90,8 +90,8 @@ def preprocess_data(cleaned_df):
 
 
 
-def save_data(preprocessed_df,output_path):
-    preprocessed_df.to_csv(output_path+'/processed_data.csv')
+def save_data(output_df,output_path):
+    output_df.to_csv(output_path+'/output_data.csv')
 
     logging.info("Saved data successfully")
 
@@ -138,7 +138,10 @@ def main():
 
     # Save data
     output_path= working_dir.as_posix() + sys.argv[2]
-    save_data(preprocessed_df,output_path)
+    
+    output_df = pd.concat([data_df['Category'], preprocessed_df.reset_index()['Resume']], axis=1)
+
+    save_data(output_df,output_path)
 
 
     print(nltk.data.path)
