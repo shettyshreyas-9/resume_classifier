@@ -89,11 +89,17 @@ def preprocess_data(cleaned_df):
     return preprocessed_df
 
 
+def split_data(output_df,output_path,test_split,seed):
+    train, test= train_test_split(output_df, test_size=test_split, random_state= seed)
+    return train, test
+    
 
-def save_data(output_df,output_path):
-    output_df.to_csv(output_path+'/output_data.csv')
 
-    logging.info("Saved data successfully")
+def save_data(train_df, test_df,output_path):
+    train_df.to_csv(output_path+'/train_df.csv')
+    test_df.to_csv(output_path+'/test_df.csv')
+
+    logging.info("Saved train and test data successfully")
 
 
 
@@ -135,13 +141,27 @@ def main():
     preprocessed_df= cleaned_df.apply(lambda x: preprocess_data(x)) 
     logging.info("Preprocessed data successfully")
 
+    # Label Encode data
+    output_df = pd.concat([data_df['Category'], preprocessed_df.reset_index()['Resume']], axis=1)
+    le= LabelEncoder()
+    output_df['Category_encoded']= le.fit_transform(output_df['Category'])
+    logging.info("Label encoded categorical data")
 
-    # Save data
+
+    # Split data
+    params_file = working_dir.as_posix()+ sys.argv[5]
+    params= yaml.safe_load(open(params_file))['make_dataset']
+
     output_path= working_dir.as_posix() + sys.argv[2]
     
-    output_df = pd.concat([data_df['Category'], preprocessed_df.reset_index()['Resume']], axis=1)
 
-    save_data(output_df,output_path)
+    train_df, test_df= split_data(output_df,output_path,params['test_split'],params['seed'])
+    logging.info("Split train and test data")
+
+
+    # Save data
+    
+    save_data(train_df, test_df,output_path)
 
 
     print(nltk.data.path)
