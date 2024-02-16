@@ -1,3 +1,41 @@
 make_dataset:
   test_split: 0.25
   seed: 4
+
+
+models:
+  - model_type: logistic_regression
+    hyperparameters:
+      C: [0.5,1.0]
+      max_iter: [20,30]
+      solver: ['lbfgs','liblinear']
+
+  - model_type: random_forest
+    hyperparameters:
+      max_depth: [3,8]
+      n_estimators: [50,100,200]
+
+  - model_type: svm
+    hyperparameters:
+      kernel: ['linear','rbf','sigmoid']
+      C: [1.0,3.0,5.0]
+      gamma: ['scale','auto']
+
+  - model_type: knc
+    hyperparameters:
+      n_neighbors: [3,5,9]
+
+  - model_type: multinomial_nb
+    hyperparameters:
+      alpha: [0.5, 1.0]
+
+  - model_type: xgb_class
+    hyperparameters:
+      n_estimators: [50,100,250]
+
+
+
+hyperparameter_tuning:
+  cv_type: grid  
+  cv_values: 5
+  scoring: 'accuracy'

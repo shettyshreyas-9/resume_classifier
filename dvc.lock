@@ -3,4 +3,4 @@ stages:
   make_dataset:
     cmd: python .\src\data\make_dataset.py .\data\raw\resume.csv  .\data\processed  .\make_data_logfile.log  .\data\nltk  .\params.yaml
   train_model:
-    cmd: python .\src\models\train_model.py  .\data\processed\output_data.csv  .\params.yaml  .\models  .\train_logfile.log
+    cmd: python .\src\models\train_model.py  .\data\processed\  .\params.yaml  .\models  .\train_logfile.log
