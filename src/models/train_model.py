@@ -105,6 +105,11 @@ def main():
     tfidf_vectorizer = TfidfVectorizer(max_features=5000)  
     X_train_tfidf = tfidf_vectorizer.fit_transform(X_train)
 
+        # Save the fitted vectorizer
+    joblib.dump(tfidf_vectorizer, model_path+'/vectorizer/tfidf_vectorizer.joblib')
+
+    logging.info(f"Saved the vectorizer model")
+
     # Hyperparameter tuning
     cv_search = params['hyperparameter_tuning']['cv_type']
     cv_search= cv_search.strip()

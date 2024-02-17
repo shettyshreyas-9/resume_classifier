@@ -76,9 +76,19 @@ def main():
     # Transform the test data
 
     # Load the TF-IDF vectorizer
-    tfidf_vectorizer = TfidfVectorizer(max_features=5000)
+    tfidf_vectorizer = joblib.load(model_path+'/vectorizer/tfidf_vectorizer.joblib')
 
-    # X_test_tfidf = tfidf_vectorizer.transform(X_test)
+    X_test_tfidf = tfidf_vectorizer.transform(X_test)
+
+
+    # Evaluate models based on configurations from params.yaml
+    for model_config in params['models']:
+        model_type= model_config['model_type']
+        hyperparameters_list = model_config['hyperparameters']
+
+        for hyperparameters in product(hyperparameters_list.values()):
+            print(hyperparameters)
+
 
 
 
