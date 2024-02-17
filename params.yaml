@@ -8,7 +8,7 @@ models:
     hyperparameters:
       C: [0.5,1.0]
       max_iter: [20,30]
-      solver: ['lbfgs','liblinear']
+      solver: ['liblinear']
 
   - model_type: random_forest
     hyperparameters:
@@ -39,3 +39,9 @@ hyperparameter_tuning:
   cv_type: grid  
   cv_values: 5
   scoring: 'accuracy'
+
+
+evaluation:
+  evaluate_type: cross_val_score
+  metric_type: f1_weighted
+  cv: 5

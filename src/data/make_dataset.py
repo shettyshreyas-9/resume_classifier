@@ -96,8 +96,8 @@ def split_data(output_df,output_path,test_split,seed):
 
 
 def save_data(train_df, test_df,output_path):
-    train_df.to_csv(output_path+'/train_df.csv')
-    test_df.to_csv(output_path+'/test_df.csv')
+    train_df.to_csv(output_path+'/train_df.csv',index=False)
+    test_df.to_csv(output_path+'/test_df.csv',index=False)
 
     logging.info("Saved train and test data successfully")
 
@@ -160,7 +160,7 @@ def main():
 
 
     # Save data
-    
+
     save_data(train_df, test_df,output_path)
 
 

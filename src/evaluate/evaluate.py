@@ -5,6 +5,7 @@ import joblib
 import logging
 import yaml
 from itertools import product
+import subprocess
 
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -20,6 +21,13 @@ from sklearn.model_selection import cross_val_score
 import mlflow
 
 
+def start_mlflow_ui():
+    mlflow_ui_command = "mlflow ui"
+    subprocess.Popen(mlflow_ui_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+start_mlflow_ui()
+
+
 def setup_logging():
     # configure logging and print to console
     log_file_path = pathlib.Path(__file__).parent.as_posix() + sys.argv[4]
@@ -32,7 +40,7 @@ def setup_logging():
 
 
 # Set the MLflow tracking URI
-mlflow.set_tracking_uri('http://localhost:5000')
+mlflow.set_tracking_uri('http://127.0.0.1:5000')
 
 
 # Check if a run is active
@@ -48,6 +56,31 @@ if experiment is None:
     mlflow.create_experiment(my_experiment_name)
 
 mlflow.set_experiment(my_experiment_name)
+
+
+# Function for evaluating model
+
+def evaluate_model_and_log(X_test_tfidf,y_test,model,evaluate_type,metric_type,cv_values,model_type,params_and_values):
+
+    if evaluate_type == 'cross_val_score':
+        cv_scores= cross_val_score(model,X_test_tfidf, y_test, cv=cv_values,scoring=metric_type)
+
+    # cv_scores=  cross_val_score(model,X_test_tfidf, y_test, cv=cv_values,scoring=metric_type)
+
+    # Log the cross-validated scores
+    for metric, score in zip([metric_type], [cv_scores.mean()]):
+        mlflow.log_metric(metric, score)
+
+    logging.info(f"The results for model: {model_type}, params: {params_and_values}, evaluation: {evaluate_type}, metric type:{metric_type}, CV: {cv_values} are = Mean scores: {cv_scores.mean()}")
+
+    # Return the cross-validated scores
+    return cv_scores
+    
+    # results = {}
+    # cv_scores = {metric['metric_type']: 
+
+
+
 
 
 def main():
@@ -69,8 +102,9 @@ def main():
 
     # load test data
     test_df= pd.read_csv(data_path+'/test_df.csv')
-    X_test = test_df.drop(columns=['Category','Category_encoded'])
-    y_test= test_df['Resume']
+    # X_test = test_df.drop(columns=['Category','Category_encoded'])
+    X_test = test_df['Resume']
+    y_test= test_df['Category_encoded']
 
 
     # Transform the test data
@@ -79,7 +113,16 @@ def main():
     tfidf_vectorizer = joblib.load(model_path+'/vectorizer/tfidf_vectorizer.joblib')
 
     X_test_tfidf = tfidf_vectorizer.transform(X_test)
-
+    
+    print('\n')
+    print(X_test.shape)
+    print(type(X_test))
+    
+    print(X_test_tfidf.shape)
+    print(type(X_test_tfidf))
+    print(y_test.shape)
+    print(type(y_test))
+    print('\n')
 
     # Evaluate models based on configurations from params.yaml
     for model_config in params['models']:
@@ -94,7 +137,7 @@ def main():
 
             # print(model_folder)
 
-            # Check if the model file exists
+            # Check if the model file exists (to only log the params for models that are saved)
             if os.path.exists(model_file_path):
                 model = joblib.load(model_file_path)
 
@@ -103,7 +146,16 @@ def main():
                     mlflow.log_param("model_name", model_type)
 
                     # Log hyperparameters
-                    mlflow.log_params(dict(zip(hyperparameters_list.keys(), hyperparameters)))
+                    params_and_values= dict(zip(hyperparameters_list.keys(), hyperparameters))
+                    mlflow.log_params(params_and_values)
+
+                    evaluate_type= params['evaluation']['evaluate_type']
+                    metric_type= params['evaluation']['metric_type']
+                    cv_values= params['evaluation']['cv']
+
+                    scores = evaluate_model_and_log(X_test_tfidf, y_test, model, evaluate_type,metric_type, cv_values,model_type,params_and_values)
+
+
             else: 
                 pass
 

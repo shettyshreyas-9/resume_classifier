@@ -25,10 +25,10 @@ from xgboost import XGBClassifier
 
 def setup_logging():
     # configure logging to a file and also print to the console
-    log_file_path = pathlib.Path(__file__).parent.as_posix()+ sys.argv[4]    # Specify the path to your log file
+    log_file_path = pathlib.Path(__file__).parent.as_posix() + sys.argv[4]    # Specify the path to your log file
     logging.basicConfig(
-        filename= log_file_path,
-        level= logging.INFO,
+        filename=log_file_path,
+        level=logging.INFO,
         format="%(asctime)s [%(levelname)s]: %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S"
     )
@@ -78,6 +78,7 @@ def train_model(X_train_tfidf, y_train, model_type, hyperparameters, cv_search, 
 
 def main():
 
+    print('check')
     setup_logging()
 
     # project setup via cookiecutter may give problem using (__file__) so used (os.getcwd())
