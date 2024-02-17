@@ -53,7 +53,7 @@ def train_model(X_train_tfidf, y_train, model_type, hyperparameters, cv_search, 
     
     param_grid= hyperparameters
 
-    print('\n',cv_search,'\n',cv_values,'\n',scoring,'\n', type(cv_search))
+    # print('\n',cv_search,'\n',cv_values,'\n',scoring,'\n', type(cv_search))
 
     if cv_search == 'grid':
         search= GridSearchCV(model, param_grid, cv=cv_values, scoring=scoring)

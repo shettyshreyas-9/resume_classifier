@@ -40,14 +40,14 @@ if mlflow.active_run():
     mlflow.end_run()
 
 # MLflow experiment name
-experiment_name= "aikido"
+my_experiment_name= "aikido"
 
 # Check if the experiment exists, if not, create it
-experiment = mlflow.get_experiment_by_name(experiment_name)
+experiment = mlflow.get_experiment_by_name(my_experiment_name)
 if experiment is None:
-    mlflow.create_experiment(experiment_name)
+    mlflow.create_experiment(my_experiment_name)
 
-mlflow.start_run()
+mlflow.set_experiment(my_experiment_name)
 
 
 def main():
@@ -86,16 +86,28 @@ def main():
         model_type= model_config['model_type']
         hyperparameters_list = model_config['hyperparameters']
 
-        # for key,values in hyperparameters_list.items():
-        #     print(key)
-        #     print(values)
 
         for hyperparameters in product(*hyperparameters_list.values()):
             # Load the trained model
-            model_folder = '_'.join(str(val) for val in hyperparameters)
+            model_folder = '_'.join(f"{key}_{val}" for key, val in zip(hyperparameters_list.keys(), hyperparameters))
             model_file_path = os.path.join(model_path, f"{model_type}/{model_folder}/model.joblib")
 
-            print(model_file_path)
+            # print(model_folder)
+
+            # Check if the model file exists
+            if os.path.exists(model_file_path):
+                model = joblib.load(model_file_path)
+
+                # Log the evaluation metrics using MLflow
+                with mlflow.start_run():
+                    mlflow.log_param("model_name", model_type)
+
+                    # Log hyperparameters
+                    mlflow.log_params(dict(zip(hyperparameters_list.keys(), hyperparameters)))
+            else: 
+                pass
+
+            
 
 
 
