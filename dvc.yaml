@@ -5,5 +5,11 @@ stages:
     # - .\src\data\make_dataset.py  
     # - .\data\raw\resume.csv
 
-  train_model:
-    cmd: python .\src\models\train_model.py  .\data\processed\  .\params.yaml  .\models  .\train_logfile.log
+  # train_model:
+    # cmd: python .\src\models\train_model.py  .\data\processed\  .\params.yaml  .\models  .\train_logfile.log
+
+  # mlflow_ui:
+  #   cmd: mlflow ui
+
+  evaluate_model:
+    cmd: python .\src\evaluate\evaluate.py  .\data\processed\  .\models\  .\params.yaml  .\evaluate_log.log

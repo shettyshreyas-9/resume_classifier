@@ -97,3 +97,4 @@ target/
 /tmp_storage
 /data
 /models
+/mlruns
