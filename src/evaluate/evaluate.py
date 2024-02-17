@@ -86,8 +86,16 @@ def main():
         model_type= model_config['model_type']
         hyperparameters_list = model_config['hyperparameters']
 
-        for hyperparameters in product(hyperparameters_list.values()):
-            print(hyperparameters)
+        # for key,values in hyperparameters_list.items():
+        #     print(key)
+        #     print(values)
+
+        for hyperparameters in product(*hyperparameters_list.values()):
+            # Load the trained model
+            model_folder = '_'.join(str(val) for val in hyperparameters)
+            model_file_path = os.path.join(model_path, f"{model_type}/{model_folder}/model.joblib")
+
+            print(model_file_path)
 
 
 
