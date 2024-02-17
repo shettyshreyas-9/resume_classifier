@@ -72,14 +72,11 @@ def evaluate_model_and_log(X_test_tfidf,y_test,model,evaluate_type,metric_type,c
         mlflow.log_metric(metric, score)
 
     logging.info(f"The results for model: {model_type}, params: {params_and_values}, evaluation: {evaluate_type}, metric type:{metric_type}, CV: {cv_values} are = Mean scores: {cv_scores.mean()}")
+  
+    # results={}
 
     # Return the cross-validated scores
-    return cv_scores
-    
-    # results = {}
-    # cv_scores = {metric['metric_type']: 
-
-
+    return cv_scores.mean()
 
 
 
@@ -124,6 +121,13 @@ def main():
     print(type(y_test))
     print('\n')
 
+
+    # Setting variables for identifying best model & params
+    best_model = None
+    best_hyperparameters = None
+    best_score = 0.0  # Assuming higher score is better
+    best_model_path= ''
+
     # Evaluate models based on configurations from params.yaml
     for model_config in params['models']:
         model_type= model_config['model_type']
@@ -155,21 +159,28 @@ def main():
 
                     scores = evaluate_model_and_log(X_test_tfidf, y_test, model, evaluate_type,metric_type, cv_values,model_type,params_and_values)
 
+                    # Update best_model if the current model has a higher score
+                    if scores> best_score:
+                        best_model= model
+                        best_hyperparameters= hyperparameters
+                        best_score= scores
+                        best_model_path= f"/{model_type}/{model_folder}/model.joblib"
 
             else: 
                 pass
 
-            
 
 
-
-
-
-
-
-
-
-
+    # Print the best model and hyperparameters
+    if best_model is not None:
+        print("Best Model:")
+        print(best_model)
+        print("Best Hyperparameters:")
+        print(dict(zip(hyperparameters_list.keys(), best_hyperparameters)))
+        print("Best Score:")
+        print(best_score)
+        print(working_dir.as_posix()+sys.argv[2]+best_model_path)
+        # logging.info(f"Best model path= {working_dir.as_posix()+sys.argv[2]+best_model_path}")
 
 if __name__ == '__main__':
     main()
