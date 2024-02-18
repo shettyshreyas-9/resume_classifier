@@ -1,16 +1,21 @@
 schema: '2.0'
 stages:
   make_dataset:
-    cmd: python .\src\data\make_dataset.py .\data\raw\resume.csv  .\data\processed  .\make_data_logfile.log  .\data\nltk  .\params.yaml
+    cmd: python .\src\data\make_dataset.py .\data\raw\resume.csv  .\data\processed  .\make_data_logfile.log  .\data\nltk\  .\params.yaml
   train_model:
     cmd: python .\src\models\train_model.py .\data\processed\ .\params.yaml .\models
       .\train_logfile.log
+    deps:
+    - path: .\src\data\make_dataset.py
+      hash: md5
+      md5: 9582522909504932c57af62fa83f0ccf
+      size: 4672
   evaluate_model:
     cmd: python .\src\evaluate\evaluate.py  .\data\processed\  .\models\  .\params.yaml  .\evaluate_log.log
-  app:
-    cmd: streamlit run main.py .\src\evaluate\evaluate_log.log
     deps:
-    - path: .\src\evaluate\evaluate.py
+    - path: .\src\models\train_model.py
       hash: md5
-      md5: 3925f0ccd0efc4e792001c8d0fd28c03
-      size: 5978
+      md5: f1ab4f758d25eef64031fbbd1de12ebf
+      size: 4485
+  app:
+    cmd: streamlit run main.py .\src\evaluate\evaluate_log.log  .\data\nltk\  .\models\  .\data\processed\train_df.csv

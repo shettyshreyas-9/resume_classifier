@@ -137,6 +137,10 @@ def main():
     nltk.download('punkt', download_dir=nltk_path)
     nltk.download('stopwords', download_dir=nltk_path)
     nltk.download('wordnet', download_dir=nltk_path)
+
+    # select the path from where nltk data is read
+    nltk.data.path.append( working_dir.as_posix()+ sys.argv[4])
+    print(nltk.data.path)
     
     preprocessed_df= cleaned_df.apply(lambda x: preprocess_data(x)) 
     logging.info("Preprocessed data successfully")

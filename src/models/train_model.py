@@ -103,7 +103,7 @@ def main():
     y_train= train_df['Category_encoded']
 
     # Add TF-IDF transformation
-    tfidf_vectorizer = TfidfVectorizer(max_features=7500)  
+    tfidf_vectorizer = TfidfVectorizer(max_features=5000)  
     X_train_tfidf = tfidf_vectorizer.fit_transform(X_train)
 
         # Save the fitted vectorizer

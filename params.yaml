@@ -29,9 +29,9 @@ models:
     hyperparameters:
       alpha: [0.5, 1.0]
 
-  - model_type: xgb_class
-    hyperparameters:
-      n_estimators: [50,100,250]
+  # - model_type: xgb_class
+  #   hyperparameters:
+  #     n_estimators: [50,100,250]
 
 
 
@@ -43,5 +43,5 @@ hyperparameter_tuning:
 
 evaluation:
   evaluate_type: cross_val_score
-  metric_type: f1_weighted
+  metric_type: precision_weighted
   cv: 5
