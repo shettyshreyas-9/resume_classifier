@@ -16,3 +16,4 @@ pandas
 scikit-learn
 xgboost
 mlflow
+streamlit

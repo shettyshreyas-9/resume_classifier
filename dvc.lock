@@ -7,3 +7,10 @@ stages:
       .\train_logfile.log
   evaluate_model:
     cmd: python .\src\evaluate\evaluate.py  .\data\processed\  .\models\  .\params.yaml  .\evaluate_log.log
+  app:
+    cmd: streamlit run main.py .\src\evaluate\evaluate_log.log
+    deps:
+    - path: .\src\evaluate\evaluate.py
+      hash: md5
+      md5: 3925f0ccd0efc4e792001c8d0fd28c03
+      size: 5978

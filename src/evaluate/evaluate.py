@@ -180,7 +180,7 @@ def main():
         print("Best Score:")
         print(best_score)
         print(working_dir.as_posix()+sys.argv[2]+best_model_path)
-        # logging.info(f"Best model path= {working_dir.as_posix()+sys.argv[2]+best_model_path}")
+        logging.info(f"Best model path= {working_dir.as_posix()+sys.argv[2]+best_model_path}")
 
 if __name__ == '__main__':
     main()

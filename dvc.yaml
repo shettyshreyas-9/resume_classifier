@@ -1,12 +1,12 @@
 stages:
-  make_dataset:
-    cmd: python .\src\data\make_dataset.py .\data\raw\resume.csv  .\data\processed  .\make_data_logfile.log  .\data\nltk  .\params.yaml
+  # make_dataset:
+  #   cmd: python .\src\data\make_dataset.py .\data\raw\resume.csv  .\data\processed  .\make_data_logfile.log  .\data\nltk  .\params.yaml
     # deps:
     # - .\src\data\make_dataset.py  
     # - .\data\raw\resume.csv
 
-  train_model:
-    cmd: python .\src\models\train_model.py .\data\processed\ .\params.yaml .\models .\train_logfile.log
+  # train_model:
+  #   cmd: python .\src\models\train_model.py .\data\processed\ .\params.yaml .\models .\train_logfile.log
     # deps:
     #   - .\src\data\make_dataset.py
     #   - .\src\models\train_model.py
@@ -19,3 +19,8 @@ stages:
     # deps:
     #   - .\src\models\train_model.py
     #   - .\src\evaluate\evaluate.py
+
+  app:
+    cmd: streamlit run main.py .\src\evaluate\evaluate_log.log
+    deps:
+      - .\src\evaluate\evaluate.py
