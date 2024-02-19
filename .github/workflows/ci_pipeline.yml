@@ -1,0 +1,9 @@
+# .github/workflows/ci_pipeline.yml
+
+name: CI Pipeline
+
+on:
+  push:
+
+jobs:
+  build: 
