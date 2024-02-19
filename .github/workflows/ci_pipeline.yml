@@ -24,6 +24,7 @@ jobs:
             python -m pip install --upgrade pip
             pip install -r requirements.txt
 
-        - name: Run the pipeline using dvc
-          run: |
-            dvc repro 
+      # Commenting the below section as remote repo. and access to it has not been set to consume data
+        # - name: Run the pipeline using dvc
+        #   run: |
+        #     dvc repro 
